@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Darsten Dragon](https://up.htmlacademy.ru/javascript/11/user/107626).
-* Наставник: `Неизвестно`.
+* Наставник: [Сергей Ufocoder](https://up.htmlacademy.ru/javascript/11/user/573445).
 
 ---
 
