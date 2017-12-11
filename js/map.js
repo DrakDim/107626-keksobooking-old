@@ -1,5 +1,7 @@
 'use strict';
 
+var ORDER_OBJECT = 8;
+
 var PRICE_MIN = 1000;
 var PRICE_MAX = 1000000;
 
@@ -8,7 +10,9 @@ var LOCATION_X_MAX = 900;
 var LOCATION_Y_MIN = 100;
 var LOCATION_Y_MAX = 500;
 
+var MIN_ROOMS = 1;
 var MAX_ROOMS = 5;
+var MIN_GUESTS = 1;
 var MAX_GUESTS = 100;
 
 var HOME_TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец',
@@ -22,58 +26,52 @@ var getRandomInt = function (min, max)	{
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-var generateNumberImg = function () {
-  /* 'цифры от 1 до 8 повторятся не должны' */
-  var anyArrs = [];
-  for (var i = 0; i < 8; i++) {
-    anyArrs[i] = i++;
-  }
-  return anyArrs;
-};
-
-var generateTitles = function () {
-  var oneTitle = HOME_TITLES[getRandomInt(0, HOME_TITLES.length - 1)];
-  /* 'заголовки повторяться не должны' */
-  return oneTitle;
+var getNumberPlusCount = function (number, count) {
+  number + count;
+  return number;
 };
 
 var getRandomFacilities = function () {
-  var randomNumber = getRandomInt(0, 10);
-  var anyArrs = [];
-  for (var i = 0; i < randomNumber; i++) {
-    anyArrs[i] = FACILITIES[getRandomInt(0, FACILITIES.length - 1)];
+  var cloneArr = FACILITIES.slice(0);
+  var returnArr = [];
+  for (var i = 0; i < FACILITIES.length; i++) {
+    var randomIndex = getRandomInt(0, cloneArr.length - 1);
+    returnArr[i] = cloneArr[randomIndex];
+    cloneArr.splice(randomIndex, 1);
   }
-  return anyArrs;
+  returnArr.length = returnArr.length - getRandomInt(0, FACILITIES.length - 1);
+  return returnArr;
 };
 
+var numberUser = 0;
+var indexHomeTitle = -1;
 var generateObjectForArray = function () {
-  var locations = {
+  var location = {
     x: getRandomInt(LOCATION_X_MIN, LOCATION_X_MAX),
     y: getRandomInt(LOCATION_Y_MIN, LOCATION_Y_MAX)
   };
-  var location = locations.x + ', ' + location.y;
   return {
     author: {
-      avatar: 'img/avatars/user0' + generateNumberImg() + '.png'
+      avatar: 'img/avatars/user0' + getNumberPlusCount(numberUser, 1) + '.png'
     },
     offer: {
-      title: generateTitles(),
-      addres: location,
+      title: HOME_TITLES[getNumberPlusCount(indexHomeTitle, 1)],
+      addres: location.x + ', ' + location.y,
       price: getRandomInt(PRICE_MIN, PRICE_MAX),
       type: HOME_TYPES[getRandomInt(0, HOME_TYPES.length - 1)],
-      rooms: getRandomInt(1, MAX_ROOMS),
-      guests: getRandomInt(1, MAX_GUESTS),
+      rooms: getRandomInt(MIN_ROOMS, MAX_ROOMS),
+      guests: getRandomInt(MIN_GUESTS, MAX_GUESTS),
       checkin: TIME_CHECKS[getRandomInt(0, TIME_CHECKS.length - 1)],
       checkout: TIME_CHECKS[getRandomInt(0, TIME_CHECKS.length - 1)],
       features: getRandomFacilities(),
       description: '',
       photos: []
     },
-    location: {
-      x: locations.x,
-      y: locations.y
-    }
+    location: location
   };
 };
 
-generateObjectForArray();
+var orderObjects = [];
+for (var i = 0; i < ORDER_OBJECT; i++) {
+  orderObjects[i].push(generateObjectForArray());
+};
