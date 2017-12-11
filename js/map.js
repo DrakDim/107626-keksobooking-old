@@ -26,11 +26,6 @@ var getRandomInt = function (min, max)	{
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-var getNumberPlusCount = function (number, count) {
-  var retNum = number + count;
-  return retNum;
-};
-
 var getRandomFacilities = function () {
   var cloneArr = FACILITIES.slice(0);
   var returnArr = [];
@@ -52,10 +47,10 @@ var generateObjectForArray = function () {
   };
   return {
     author: {
-      avatar: 'img/avatars/user0' + getNumberPlusCount(numberUser, 1) + '.png'
+      avatar: 'img/avatars/user0' + (numberUser++) + '.png'
     },
     offer: {
-      title: HOME_TITLES[getNumberPlusCount(indexHomeTitle, 1)],
+      title: HOME_TITLES[indexHomeTitle++],
       addres: location.x + ', ' + location.y,
       price: getRandomInt(PRICE_MIN, PRICE_MAX),
       type: HOME_TYPES[getRandomInt(0, HOME_TYPES.length - 1)],
