@@ -29,28 +29,26 @@ var getRandomInt = function (min, max)	{
 var getRandomFacilities = function () {
   var cloneArr = FACILITIES.slice(0);
   var returnArr = [];
-  for (var i = 0; i < FACILITIES.length; i++) {
+  var length = getRandomInt(0, FACILITIES.length);
+  for (var i = 0; i < length; i++) {
     var randomIndex = getRandomInt(0, cloneArr.length - 1);
     returnArr[i] = cloneArr[randomIndex];
     cloneArr.splice(randomIndex, 1);
   }
-  returnArr.length = returnArr.length - getRandomInt(0, FACILITIES.length - 1);
   return returnArr;
 };
 
-var numberUser = 0;
-var indexHomeTitle = -1;
-var generateObjectForArray = function () {
+var generateOrder = function (index) {
   var location = {
     x: getRandomInt(LOCATION_X_MIN, LOCATION_X_MAX),
     y: getRandomInt(LOCATION_Y_MIN, LOCATION_Y_MAX)
   };
   return {
     author: {
-      avatar: 'img/avatars/user0' + (numberUser++) + '.png'
+      avatar: 'img/avatars/user0' + (index + 1) + '.png'
     },
     offer: {
-      title: HOME_TITLES[indexHomeTitle++],
+      title: HOME_TITLES[index],
       addres: location.x + ', ' + location.y,
       price: getRandomInt(PRICE_MIN, PRICE_MAX),
       type: HOME_TYPES[getRandomInt(0, HOME_TYPES.length - 1)],
@@ -68,5 +66,6 @@ var generateObjectForArray = function () {
 
 var orderObjects = [];
 for (var i = 0; i < ORDER_OBJECT; i++) {
-  orderObjects[i].push(generateObjectForArray());
+  orderObjects.push(generateOrder(i));
 }
+console.log(orderObjects);
