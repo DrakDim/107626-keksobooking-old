@@ -74,4 +74,4 @@ var generateObjectForArray = function () {
 var orderObjects = [];
 for (var i = 0; i < ORDER_OBJECT; i++) {
   orderObjects[i].push(generateObjectForArray());
-};
+}
