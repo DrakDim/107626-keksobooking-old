@@ -27,8 +27,8 @@ var getRandomInt = function (min, max)	{
 };
 
 var getNumberPlusCount = function (number, count) {
-  number + count;
-  return number;
+  var retNum = number + count;
+  return retNum;
 };
 
 var getRandomFacilities = function () {
