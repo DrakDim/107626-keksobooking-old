@@ -1,6 +1,6 @@
 'use strict';
 
-var ORDER_OBJECT = 8;
+var ORDER_LIMIT = 8;
 
 var PRICE_MIN = 1000;
 var PRICE_MAX = 1000000;
@@ -20,28 +20,28 @@ var HOME_TITLES = ['Большая уютная квартира', 'Малень
   'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
 var HOME_TYPES = ['flat', 'house', 'bungalo'];
 var TIME_CHECKS = ['12:00', '13:00', '14:00'];
-var FACILITIES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
-var getRandomInt = function (min, max)	{
+var generateRandomNumber = function (min, max)	{
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-var getRandomFacilities = function () {
-  var cloneArr = FACILITIES.slice(0);
-  var returnArr = [];
-  var length = getRandomInt(0, FACILITIES.length);
-  for (var i = 0; i < length; i++) {
-    var randomIndex = getRandomInt(0, cloneArr.length - 1);
-    returnArr[i] = cloneArr[randomIndex];
-    cloneArr.splice(randomIndex, 1);
+var generateRandomFeatures = function () {
+  var features = FEATURES.slice(0);
+  var result = [];
+  var count = generateRandomNumber(0, FEATURES.length);
+  for (var i = 0; i < count; i++) {
+    var randomIndex = generateRandomNumber(0, features.length - 1);
+    result[i] = features[randomIndex];
+    features.splice(randomIndex, 1);
   }
-  return returnArr;
+  return result;
 };
 
 var generateOrder = function (index) {
   var location = {
-    x: getRandomInt(LOCATION_X_MIN, LOCATION_X_MAX),
-    y: getRandomInt(LOCATION_Y_MIN, LOCATION_Y_MAX)
+    x: generateRandomNumber(LOCATION_X_MIN, LOCATION_X_MAX),
+    y: generateRandomNumber(LOCATION_Y_MIN, LOCATION_Y_MAX)
   };
   return {
     author: {
@@ -50,13 +50,13 @@ var generateOrder = function (index) {
     offer: {
       title: HOME_TITLES[index],
       addres: location.x + ', ' + location.y,
-      price: getRandomInt(PRICE_MIN, PRICE_MAX),
-      type: HOME_TYPES[getRandomInt(0, HOME_TYPES.length - 1)],
-      rooms: getRandomInt(MIN_ROOMS, MAX_ROOMS),
-      guests: getRandomInt(MIN_GUESTS, MAX_GUESTS),
-      checkin: TIME_CHECKS[getRandomInt(0, TIME_CHECKS.length - 1)],
-      checkout: TIME_CHECKS[getRandomInt(0, TIME_CHECKS.length - 1)],
-      features: getRandomFacilities(),
+      price: generateRandomNumber(PRICE_MIN, PRICE_MAX),
+      type: HOME_TYPES[generateRandomNumber(0, HOME_TYPES.length - 1)],
+      rooms: generateRandomNumber(MIN_ROOMS, MAX_ROOMS),
+      guests: generateRandomNumber(MIN_GUESTS, MAX_GUESTS),
+      checkin: TIME_CHECKS[generateRandomNumber(0, TIME_CHECKS.length - 1)],
+      checkout: TIME_CHECKS[generateRandomNumber(0, TIME_CHECKS.length - 1)],
+      features: generateRandomFeatures(),
       description: '',
       photos: []
     },
@@ -64,8 +64,7 @@ var generateOrder = function (index) {
   };
 };
 
-var orderObjects = [];
-for (var i = 0; i < ORDER_OBJECT; i++) {
-  orderObjects.push(generateOrder(i));
+var orders = [];
+for (var i = 0; i < ORDER_LIMIT; i++) {
+  orders.push(generateOrder(i));
 }
-console.log(orderObjects);
