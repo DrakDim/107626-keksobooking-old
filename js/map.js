@@ -29,10 +29,11 @@ var generateRandomNumber = function (min, max)	{
 var generateRandomFeatures = function () {
   var features = FEATURES.slice(0);
   var result = [];
-  var count = generateRandomNumber(0, FEATURES.length);
+  var count = generateRandomNumber(0, FEATURES.length - 1);
+  var randomIndex;
   for (var i = 0; i < count; i++) {
-    var randomIndex = generateRandomNumber(0, features.length - 1);
-    result[i] = features[randomIndex];
+    randomIndex = generateRandomNumber(0, features.length - 1);
+    result.push(features[randomIndex]);
     features.splice(randomIndex, 1);
   }
   return result;
@@ -68,3 +69,5 @@ var orders = [];
 for (var i = 0; i < ORDER_LIMIT; i++) {
   orders.push(generateOrder(i));
 }
+
+document.querySelector('.map').classList.remove('map--faded');
