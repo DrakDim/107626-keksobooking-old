@@ -29,7 +29,7 @@ var generateRandomNumber = function (min, max)	{
 var generateRandomFeatures = function () {
   var features = FEATURES.slice(0);
   var result = [];
-  var count = generateRandomNumber(0, FEATURES.length - 1);
+  var count = generateRandomNumber(1, FEATURES.length);
   var randomIndex;
   for (var i = 0; i < count; i++) {
     randomIndex = generateRandomNumber(0, features.length - 1);
