@@ -75,7 +75,7 @@ for (var i = 0; i < ORDER_LIMIT; i++) {
 document.querySelector('.map').classList.remove('map--faded');
 
 var renderPin = function (order) {
-  var pinElement = document.querySelector('template button.map__pin').cloneNode(true);
+  var pinElement = document.querySelector('template').content.querySelector('button.map__pin').cloneNode(true);
   pinElement.style.left = order.location.x;
   pinElement.style.top = order.location.y;
   pinElement.querySelector('img').src = order.author.avatar;
@@ -83,7 +83,7 @@ var renderPin = function (order) {
 };
 
 var renderOrder = function (order) {
-  var orderElement = document.querySelector('template article.map__card').cloneNode(true);
+  var orderElement = document.querySelector('template').content.querySelector('article.map__card').cloneNode(true);
   orderElement.querySelector('h3').textContent = order.offer.title;
   orderElement.querySelector('p small').textContent = order.offer.address;
   orderElement.querySelector('.popup__price').textContent = order.offer.price + '&#x20bd;/ночь';
