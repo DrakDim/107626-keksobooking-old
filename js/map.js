@@ -74,39 +74,42 @@ for (var i = 0; i < ORDER_LIMIT; i++) {
 
 document.querySelector('.map').classList.remove('map--faded');
 
-
 var renderPin = function (order) {
-  var initialPin = document.querySelector('template button.map__pin').cloneNode(true);
-  initialPin.style.left = order.location.x;
-  initialPin.style.top = order.location.y;
-  initialPin.querySelector('img').src = order.author.avatar;
-  return initialPin;
+  var pinElement = document.querySelector('template button.map__pin').cloneNode(true);
+  pinElement.style.left = order.location.x;
+  pinElement.style.top = order.location.y;
+  pinElement.querySelector('img').src = order.author.avatar;
+  return pinElement;
 };
 
 var renderOrder = function (order) {
-  var initialOrder = document.querySelector('template article.map__card').cloneNode(true);
-  initialOrder.querySelector('h3').textContent = order.offer.title;
-  initialOrder.querySelector('p small').textContent = order.offer.address;
-  initialOrder.querySelector('.popup__price').textContent = order.offer.price + '&#x20bd;/ночь';
-  if (order.offer.type === 'flat') {
-    initialOrder.querySelector('h4').textContent = 'Квартира';
-  } else if (order.offer.type === 'bungalo') {
-    initialOrder.querySelector('h4').textContent = 'Бунгало';
-  } else if (order.offer.type === 'house') {
-    initialOrder.querySelector('h4').textContent = 'Дом';
-  } else {
-    initialOrder.querySelector('h4').textContent = 'Некорректное значение';
-  }
-  initialOrder.child[6].textContent = order.offer.rooms + ' для ' + order.offer.guests + ' гостей';
-  initialOrder.child[7].textContent = 'Заезд после ' + order.offer.checkin + ', выезд до ' + order.offer.checkout;
+  var orderElement = document.querySelector('template article.map__card').cloneNode(true);
+  orderElement.querySelector('h3').textContent = order.offer.title;
+  orderElement.querySelector('p small').textContent = order.offer.address;
+  orderElement.querySelector('.popup__price').textContent = order.offer.price + '&#x20bd;/ночь';
 
-  var oneFeature = initialOrder.querySelector('.popup__features li').cloneNode;
+  var convertOfferTypeToText = function (parametr) {
+    if (parametr === 'flat') {
+      return 'Квартира';
+    } else if (parametr === 'bungalo') {
+      return 'Бунгало';
+    } else if (parametr === 'house') {
+      return 'Дом';
+    } else {
+      return 'Некорректное значение';
+    }
+  };
+  orderElement.querySelector('h4').textContent = convertOfferTypeToText(order.offer.type);
+  orderElement.querySelectorAll('p')[3].textContent = order.offer.rooms + ' для ' + order.offer.guests + ' гостей';
+  orderElement.querySelectorAll('p')[4].textContent = 'Заезд после ' + order.offer.checkin + ', выезд до ' + order.offer.checkout;
+
+  var oneFeature = orderElement.querySelector('.popup__features li').cloneNode;
   for (i = 0; i < order.offer.features.length; i++) {
     oneFeature.classList.add('feature feature--' + order.offer.features[i]);
-    initialOrder.appendChild(oneFeature);
+    orderElement.appendChild(oneFeature);
   }
-  initialOrder.child[9].textContent = order.offer.description;
-  return initialOrder;
+  orderElement.querySelectorAll('p')[5].textContent = order.offer.description;
+  return orderElement;
 };
 
 var fragment = document.createDocumentFragment();
@@ -114,3 +117,5 @@ for (i = 0; i < orders.length; i++) {
   fragment.appendChild(renderPin(orders[i]));
   fragment.appendChild(renderOrder(orders[i]));
 }
+
+document.querySelector('.map__pins').appendChild(fragment);
