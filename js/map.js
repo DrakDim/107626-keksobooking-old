@@ -82,7 +82,13 @@ var renderPin = function (order) {
   return pinElement;
 };
 
-var renderOrder = function (order) {
+var fragment = document.createDocumentFragment();
+for (i = 0; i < orders.length; i++) {
+  fragment.appendChild(renderPin(orders[i]));
+}
+document.querySelector('.map__pins').appendChild(fragment);
+
+/* var renderOrder = function (order) {
   var orderElement = document.querySelector('template').content.querySelector('article.map__card').cloneNode(true);
   orderElement.querySelector('h3').textContent = order.offer.title;
   orderElement.querySelector('p small').textContent = order.offer.address;
@@ -107,8 +113,9 @@ var renderOrder = function (order) {
   orderElement.querySelectorAll('p')[3].textContent = order.offer.rooms + ' для ' + order.offer.guests + ' гостей';
   orderElement.querySelectorAll('p')[4].textContent = 'Заезд после ' + order.offer.checkin + ', выезд до ' + order.offer.checkout;
 
-  var oneFeature = orderElement.querySelector('.popup__features li').cloneNode;
+  var oneFeature = orderElement.querySelector('ul.popup__features li').cloneNode();
   for (i = 0; i < order.offer.features.length; i++) {
+    console.log(oneFeature);
     oneFeature.classList.add('feature feature--' + order.offer.features[i]);
     orderElement.appendChild(oneFeature);
   }
@@ -116,10 +123,12 @@ var renderOrder = function (order) {
   return orderElement;
 };
 
-var fragment = document.createDocumentFragment();
 for (i = 0; i < orders.length; i++) {
   fragment.appendChild(renderPin(orders[i]));
+}
+
+for (i = 0; i < orders.length; i++) {
   fragment.appendChild(renderOrder(orders[i]));
 }
 
-document.querySelector('.map__pins').appendChild(fragment);
+document.querySelector('.map__pins').appendChild(fragment); */
