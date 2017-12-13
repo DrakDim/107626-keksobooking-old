@@ -142,7 +142,7 @@ var renderOrder = function (order) {
   }
   for (i = 0; i < order.offer.features.length; i++) {
     listFeatures.appendChild(ItemListFeature);
-    ItemListFeature.classList.add('text');
+    ItemListFeature.classList.add('feature feature--');
   }
 
   orderElement.querySelectorAll('p')[5].textContent = order.offer.description;
