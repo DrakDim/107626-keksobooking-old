@@ -89,24 +89,24 @@ for (i = 0; i < orders.length; i++) {
 }
 document.querySelector('.map__pins').appendChild(pinsFragment);
 
+var convertOfferTypeToText = function (offertType) {
+  switch (offertType) {
+    case 'flat':
+      return 'Квартира';
+    case 'bungalo':
+      return 'Бунгало';
+    case 'house':
+      return 'Дом';
+    default:
+      return 'Нет такого значения';
+  }
+};
+
 var renderOrder = function (order) {
   var orderElement = document.querySelector('template').content.querySelector('article.map__card').cloneNode(true);
   orderElement.querySelector('h3').textContent = order.offer.title;
   orderElement.querySelector('p small').textContent = order.offer.address;
   orderElement.querySelector('.popup__price').innerHTML = order.offer.price + ' &#x20bd;/ночь';
-
-  var convertOfferTypeToText = function (offertType) {
-    switch (offertType) {
-      case 'flat':
-        return 'Квартира';
-      case 'bungalo':
-        return 'Бунгало';
-      case 'house':
-        return 'Дом';
-      default:
-        return 'Нет такого значения';
-    }
-  };
   orderElement.querySelector('h4').textContent = convertOfferTypeToText(order.offer.type);
   orderElement.querySelectorAll('p')[2].textContent = order.offer.rooms + ' комнат для ' + order.offer.guests + ' гостей';
   orderElement.querySelectorAll('p')[3].textContent = 'Заезд после ' + order.offer.checkin + ', выезд до ' + order.offer.checkout;
