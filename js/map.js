@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Константы
+ */
+
 var ORDER_LIMIT = 8;
 
 var PRICE_MIN = 1000;
@@ -15,7 +19,8 @@ var MAX_ROOMS = 5;
 var MIN_GUESTS = 1;
 var MAX_GUESTS = 100;
 
-/* var OFSSET_PiN = 65; */
+var IMAGE_OFFSET_X = 20;
+var IMAGE_OFSSET_Y = 65;
 
 var HOME_TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец',
   'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик',
@@ -23,6 +28,10 @@ var HOME_TITLES = ['Большая уютная квартира', 'Малень
 var HOME_TYPES = ['flat', 'house', 'bungalo'];
 var TIME_CHECKS = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+
+/**
+ * Промежуточные вычисления
+ */
 
 var generateRandomNumber = function (min, max)	{
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -40,6 +49,10 @@ var generateRandomFeatures = function () {
   }
   return result;
 };
+
+/**
+ *  Генерация данных
+ */
 
 var generateOrder = function (index) {
   var location = {
@@ -72,23 +85,31 @@ for (var i = 0; i < ORDER_LIMIT; i++) {
   orders.push(generateOrder(i));
 }
 
+/**
+ * Отрисовка пинов
+ */
+
 document.querySelector('.map').classList.remove('map--faded');
 
 var renderPin = function (order) {
   var pinElement = document.querySelector('template').content.querySelector('button.map__pin').cloneNode(true);
-  pinElement.style.left = order.location.x;
-  pinElement.style.top = order.location.y;
+  pinElement.style.left = (order.location.x - IMAGE_OFFSET_X) + 'px';
+  pinElement.style.top = (order.location.y - IMAGE_OFSSET_Y) + 'px';
   pinElement.querySelector('img').src = order.author.avatar;
   return pinElement;
 };
 
-var fragment = document.createDocumentFragment();
+var pinsFragment = document.createDocumentFragment();
 for (i = 0; i < orders.length; i++) {
-  fragment.appendChild(renderPin(orders[i]));
+  pinsFragment.appendChild(renderPin(orders[i]));
 }
-document.querySelector('.map__pins').appendChild(fragment);
+document.querySelector('.map__pins').appendChild(pinsFragment);
 
-/* var renderOrder = function (order) {
+/**
+ * Отрисовка объявлений
+ */
+
+var renderOrder = function (order) {
   var orderElement = document.querySelector('template').content.querySelector('article.map__card').cloneNode(true);
   orderElement.querySelector('h3').textContent = order.offer.title;
   orderElement.querySelector('p small').textContent = order.offer.address;
@@ -115,7 +136,6 @@ document.querySelector('.map__pins').appendChild(fragment);
 
   var oneFeature = orderElement.querySelector('ul.popup__features li').cloneNode();
   for (i = 0; i < order.offer.features.length; i++) {
-    console.log(oneFeature);
     oneFeature.classList.add('feature feature--' + order.offer.features[i]);
     orderElement.appendChild(oneFeature);
   }
@@ -123,12 +143,8 @@ document.querySelector('.map__pins').appendChild(fragment);
   return orderElement;
 };
 
+var ordersFragment = document.createDocumentFragment();
 for (i = 0; i < orders.length; i++) {
-  fragment.appendChild(renderPin(orders[i]));
+  ordersFragment.appendChild(renderOrder(orders[i]));
 }
-
-for (i = 0; i < orders.length; i++) {
-  fragment.appendChild(renderOrder(orders[i]));
-}
-
-document.querySelector('.map__pins').appendChild(fragment); */
+document.querySelector('.map').insertBefore(ordersFragment, document.querySelector('.map__filters-container'));
