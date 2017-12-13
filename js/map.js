@@ -95,20 +95,17 @@ var renderOrder = function (order) {
   orderElement.querySelector('p small').textContent = order.offer.address;
   orderElement.querySelector('.popup__price').innerHTML = order.offer.price + ' &#x20bd;/ночь';
 
-  var convertOfferTypeToText = function (parametr) {
-    var value;
-    switch (parametr) {
+  var convertOfferTypeToText = function (offertType) {
+    switch (offertType) {
       case 'flat':
-        value = 'Квартира';
-        break;
+        return 'Квартира';
       case 'bungalo':
-        value = 'Бунгало';
-        break;
+        return 'Бунгало';
       case 'house':
-        value = 'Дом';
-        break;
+        return 'Дом';
+      default:
+        return 'Нет такого значения';
     }
-    return value;
   };
   orderElement.querySelector('h4').textContent = convertOfferTypeToText(order.offer.type);
   orderElement.querySelectorAll('p')[2].textContent = order.offer.rooms + ' комнат для ' + order.offer.guests + ' гостей';
