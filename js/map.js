@@ -1,9 +1,5 @@
 'use strict';
 
-/**
- * Константы
- */
-
 var ORDER_LIMIT = 8;
 
 var PRICE_MIN = 1000;
@@ -29,10 +25,6 @@ var HOME_TYPES = ['flat', 'house', 'bungalo'];
 var TIME_CHECKS = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
-/**
- * Промежуточные вычисления
- */
-
 var generateRandomNumber = function (min, max)	{
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
@@ -49,10 +41,6 @@ var generateRandomFeatures = function () {
   }
   return result;
 };
-
-/**
- *  Генерация данных
- */
 
 var generateOrder = function (index) {
   var location = {
@@ -85,10 +73,6 @@ for (var i = 0; i < ORDER_LIMIT; i++) {
   orders.push(generateOrder(i));
 }
 
-/**
- * Отрисовка пинов
- */
-
 document.querySelector('.map').classList.remove('map--faded');
 
 var renderPin = function (order) {
@@ -104,10 +88,6 @@ for (i = 0; i < orders.length; i++) {
   pinsFragment.appendChild(renderPin(orders[i]));
 }
 document.querySelector('.map__pins').appendChild(pinsFragment);
-
-/**
- * Отрисовка объявлений
- */
 
 var renderOrder = function (order) {
   var orderElement = document.querySelector('template').content.querySelector('article.map__card').cloneNode(true);
@@ -137,18 +117,13 @@ var renderOrder = function (order) {
   var listFeatures = orderElement.querySelector('ul.popup__features');
   var ItemListFeature = orderElement.querySelector('li');
 
-  for (i = 0; i < ItemListFeature.classList.length; i++) {
-    ItemListFeature.classList.remove(order.offer.features[i]);
-  }
-  ItemListFeature.classList.remove('feature--wifi');
-
   while (listFeatures.firstChild) {
     listFeatures.removeChild(listFeatures.firstChild);
   }
   var templateFeature;
   for (i = 0; i < order.offer.features.length; i++) {
     templateFeature = ItemListFeature.cloneNode();
-    templateFeature.classList.add('feature--' + order.offer.features[i]);
+    templateFeature.className = 'feature feature--' + order.offer.features[i];
     listFeatures.appendChild(templateFeature);
   }
 
