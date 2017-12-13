@@ -134,11 +134,17 @@ var renderOrder = function (order) {
   orderElement.querySelectorAll('p')[3].textContent = order.offer.rooms + ' для ' + order.offer.guests + ' гостей';
   orderElement.querySelectorAll('p')[4].textContent = 'Заезд после ' + order.offer.checkin + ', выезд до ' + order.offer.checkout;
 
-  var oneFeature = orderElement.querySelector('ul.popup__features li').cloneNode();
-  for (i = 0; i < order.offer.features.length; i++) {
-    oneFeature.classList.add('feature feature--' + order.offer.features[i]);
-    orderElement.appendChild(oneFeature);
+  var listFeatures = orderElement.querySelector('ul.popup__features');
+  var ItemListFeature = orderElement.querySelector('li').cloneNode();
+
+  while (listFeatures.fitstChild) {
+    listFeatures.removeChild(listFeatures.fitstChild);
   }
+  for (i = 0; i < order.offer.features.length; i++) {
+    listFeatures.appendChild(ItemListFeature);
+    ItemListFeature.classList.add('text');
+  }
+
   orderElement.querySelectorAll('p')[5].textContent = order.offer.description;
   return orderElement;
 };
