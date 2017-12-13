@@ -113,7 +113,7 @@ var renderOrder = function (order) {
   var orderElement = document.querySelector('template').content.querySelector('article.map__card').cloneNode(true);
   orderElement.querySelector('h3').textContent = order.offer.title;
   orderElement.querySelector('p small').textContent = order.offer.address;
-  orderElement.querySelector('.popup__price').textContent = order.offer.price + '&#x20bd;/ночь';
+  orderElement.querySelector('.popup__price').innerHTML = order.offer.price + ' &#x20bd;/ночь';
 
   var convertOfferTypeToText = function (parametr) {
     var value;
@@ -131,26 +131,30 @@ var renderOrder = function (order) {
     return value;
   };
   orderElement.querySelector('h4').textContent = convertOfferTypeToText(order.offer.type);
-  orderElement.querySelectorAll('p')[3].textContent = order.offer.rooms + ' для ' + order.offer.guests + ' гостей';
-  orderElement.querySelectorAll('p')[4].textContent = 'Заезд после ' + order.offer.checkin + ', выезд до ' + order.offer.checkout;
+  orderElement.querySelectorAll('p')[2].textContent = order.offer.rooms + ' комнат для ' + order.offer.guests + ' гостей';
+  orderElement.querySelectorAll('p')[3].textContent = 'Заезд после ' + order.offer.checkin + ', выезд до ' + order.offer.checkout;
 
   var listFeatures = orderElement.querySelector('ul.popup__features');
-  var ItemListFeature = orderElement.querySelector('li').cloneNode();
 
-  while (listFeatures.fitstChild) {
-    listFeatures.removeChild(listFeatures.fitstChild);
+  var ItemListFeature = orderElement.querySelector('li');
+  for (i = 0; i < ItemListFeature.classList.length; i++) {
+    ItemListFeature.classList.remove(order.offer.features[i]);
   }
+  ItemListFeature.classList.remove('feature', 'feature--wifi');
+
+  while (listFeatures.firstChild) {
+    listFeatures.removeChild(listFeatures.firstChild);
+  }
+
   for (i = 0; i < order.offer.features.length; i++) {
-    listFeatures.appendChild(ItemListFeature);
-    ItemListFeature.classList.add('feature feature--');
+    listFeatures.appendChild(ItemListFeature.cloneNode());
+    ItemListFeature.classList.toggle('feature', 'feature--' + order.offer.features[i]);
   }
 
-  orderElement.querySelectorAll('p')[5].textContent = order.offer.description;
+  orderElement.querySelectorAll('p')[4].textContent = order.offer.description;
   return orderElement;
 };
 
 var ordersFragment = document.createDocumentFragment();
-for (i = 0; i < orders.length; i++) {
-  ordersFragment.appendChild(renderOrder(orders[i]));
-}
+ordersFragment.appendChild(renderOrder(orders[0]));
 document.querySelector('.map').insertBefore(ordersFragment, document.querySelector('.map__filters-container'));
