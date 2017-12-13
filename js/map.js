@@ -74,9 +74,11 @@ for (var i = 0; i < ORDER_LIMIT; i++) {
 }
 
 document.querySelector('.map').classList.remove('map--faded');
+var templatePinElement = document.querySelector('template').content.querySelector('button.map__pin');
+var templateOrderElement = document.querySelector('template').content.querySelector('article.map__card');
 
 var renderPin = function (order) {
-  var pinElement = document.querySelector('template').content.querySelector('button.map__pin').cloneNode(true);
+  var pinElement = templatePinElement.cloneNode(true);
   pinElement.style.left = (order.location.x - IMAGE_OFFSET_X) + 'px';
   pinElement.style.top = (order.location.y - IMAGE_OFSSET_Y) + 'px';
   pinElement.querySelector('img').src = order.author.avatar;
@@ -103,7 +105,7 @@ var convertOfferTypeToText = function (offertType) {
 };
 
 var renderOrder = function (order) {
-  var orderElement = document.querySelector('template').content.querySelector('article.map__card').cloneNode(true);
+  var orderElement = templateOrderElement.cloneNode(true);
   orderElement.querySelector('h3').textContent = order.offer.title;
   orderElement.querySelector('p small').textContent = order.offer.address;
   orderElement.querySelector('.popup__price').innerHTML = order.offer.price + ' &#x20bd;/ночь';
