@@ -135,20 +135,21 @@ var renderOrder = function (order) {
   orderElement.querySelectorAll('p')[3].textContent = 'Заезд после ' + order.offer.checkin + ', выезд до ' + order.offer.checkout;
 
   var listFeatures = orderElement.querySelector('ul.popup__features');
-
   var ItemListFeature = orderElement.querySelector('li');
+
   for (i = 0; i < ItemListFeature.classList.length; i++) {
     ItemListFeature.classList.remove(order.offer.features[i]);
   }
-  ItemListFeature.classList.remove('feature', 'feature--wifi');
+  ItemListFeature.classList.remove('feature--wifi');
 
   while (listFeatures.firstChild) {
     listFeatures.removeChild(listFeatures.firstChild);
   }
-
+  var templateFeature;
   for (i = 0; i < order.offer.features.length; i++) {
-    listFeatures.appendChild(ItemListFeature.cloneNode());
-    ItemListFeature.classList.toggle('feature', 'feature--' + order.offer.features[i]);
+    templateFeature = ItemListFeature.cloneNode();
+    templateFeature.classList.add('feature--' + order.offer.features[i]);
+    listFeatures.appendChild(templateFeature);
   }
 
   orderElement.querySelectorAll('p')[4].textContent = order.offer.description;
