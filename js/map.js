@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * Константы
+ */
+
 var ORDER_LIMIT = 8;
 
 var PRICE_MIN = 1000;
@@ -25,9 +29,35 @@ var HOME_TYPES = ['flat', 'house', 'bungalo'];
 var TIME_CHECKS = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
+/**
+ * Промежуточные вычисления
+ */
+
 var generateRandomNumber = function (min, max)	{
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
+
+var convertOfferTypeToText = function (offertType) {
+  switch (offertType) {
+    case 'flat':
+      return 'Квартира';
+    case 'bungalo':
+      return 'Бунгало';
+    case 'house':
+      return 'Дом';
+    default:
+      return 'Нет такого значения';
+  }
+};
+
+var orderForms = document.querySelector('.notice__form--disabled').querySelectorAll('fieldset');
+for (i = 0; i < orderForms.length; i++) {
+  orderForms[i].setAttribute('disabled', 'disabled');
+}
+
+/**
+ * Cоздание исходных данных
+ */
 
 var generateRandomFeatures = function () {
   var features = FEATURES.slice(0);
@@ -73,10 +103,11 @@ for (var i = 0; i < ORDER_LIMIT; i++) {
   orders.push(generateOrder(i));
 }
 
-document.querySelector('.map').classList.remove('map--faded');
-var templatePinElement = document.querySelector('template').content.querySelector('button.map__pin');
-var templateOrderElement = document.querySelector('template').content.querySelector('article.map__card');
+/**
+ * Отрисовка пинов
+ */
 
+var templatePinElement = document.querySelector('template').content.querySelector('button.map__pin');
 var renderPin = function (order) {
   var pinElement = templatePinElement.cloneNode(true);
   pinElement.style.left = (order.location.x - IMAGE_OFFSET_X) + 'px';
@@ -89,21 +120,25 @@ var pinsFragment = document.createDocumentFragment();
 for (i = 0; i < orders.length; i++) {
   pinsFragment.appendChild(renderPin(orders[i]));
 }
-document.querySelector('.map__pins').appendChild(pinsFragment);
 
-var convertOfferTypeToText = function (offertType) {
-  switch (offertType) {
-    case 'flat':
-      return 'Квартира';
-    case 'bungalo':
-      return 'Бунгало';
-    case 'house':
-      return 'Дом';
-    default:
-      return 'Нет такого значения';
+var mapElement = document.querySelector('.map');
+var onButtonMouseup = function () {
+  mapElement.classList.remove('map--faded');
+  document.querySelector('.map__pins').appendChild(pinsFragment);
+  for (i = 0; i < orderForms.length; i++) {
+    orderForms[i].removeAttribute('disabled', 'disabled');
   }
+  document.querySelector('.notice__form--disabled').classList.remove('notice__form--disabled');
 };
 
+var buttonPinMain = document.querySelector('button.map__pin--main');
+buttonPinMain.addEventListener('mouseup', onButtonMouseup);
+
+/**
+ * Отрисовка объявления
+ */
+
+var templateOrderElement = document.querySelector('template').content.querySelector('article.map__card');
 var renderOrder = function (order) {
   var orderElement = templateOrderElement.cloneNode(true);
   orderElement.querySelector('h3').textContent = order.offer.title;
@@ -132,4 +167,16 @@ var renderOrder = function (order) {
 
 var ordersFragment = document.createDocumentFragment();
 ordersFragment.appendChild(renderOrder(orders[0]));
-document.querySelector('.map').insertBefore(ordersFragment, document.querySelector('.map__filters-container'));
+var onButtonClick = function () {
+  mapElement.insertBefore(ordersFragment, document.querySelector('.map__filters-container'));
+};
+
+var onePin = document.querySelector('.map__pin');
+onePin.addEventListener('click', onButtonClick);
+
+var closePopup = document.querySelector('.popup__close');
+var popupOrder = document.querySelector('.popup');
+closePopup.addEventListener('click', function () {
+  popupOrder.classList.add('hidden');
+});
+
