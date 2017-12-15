@@ -123,6 +123,7 @@ var templateOrderElement = document.querySelector('template').content.querySelec
 var mapElement = document.querySelector('.map');
 var userPinElement = document.querySelector('.map__pin');
 var mapPinsElement = document.querySelector('.map__pins');
+var allPinsElement = document.querySelectorAll('.map__pin');
 var pinMainElement = document.querySelector('button.map__pin--main');
 var filterContainerElement = document.querySelector('.map__filters-container');
 
@@ -139,23 +140,23 @@ for (i = 0; i < orders.length; i++) {
 ordersFragment.appendChild(renderOrder(orders[0], templateOrderElement));
 
 
-var onButtonMouseup = function () {
+var onMainPinMouseup = function () {
   mapElement.classList.remove('map--faded');
   mapPinsElement.appendChild(pinsFragment);
   for (i = 0; i < orderFormElements.length; i++) {
     orderFormElements[i].removeAttribute('disabled', 'disabled');
   }
   hiddenFormElement.classList.remove('notice__form--disabled');
-  pinMainElement.removeEventListener('mouseup', onButtonMouseup);
-};
-pinMainElement.addEventListener('mouseup', onButtonMouseup);
-
-var onButtonClick = function (event) {
-  if (event.target.className !== 'map__pin--main') {
-    if (event.target.className === 'map__pin') {
-      event.target.classList.add('map__pin--active');
-      mapElement.insertBefore(ordersFragment, filterContainerElement);
+  for (i = 0; i < allPinsElement.length; i++) {
+    if (userPinElement.classList !== '.map__pin--main') {
+      userPinElement.addEventListener('click', onUserPinClick);
     }
   }
+  pinMainElement.removeEventListener('mouseup', onMainPinMouseup);
 };
-userPinElement.addEventListener('click', onButtonClick);
+pinMainElement.addEventListener('mouseup', onMainPinMouseup);
+
+var onUserPinClick = function (event) {
+  event.target.classList.add('map__pin--active');
+  mapElement.insertBefore(ordersFragment, filterContainerElement);
+};
