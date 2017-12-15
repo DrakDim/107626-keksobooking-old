@@ -43,7 +43,7 @@ var generateRandomFeatures = function () {
   var result = [];
   var count = generateRandomNumber(1, FEATURES.length);
   var randomIndex;
-  for (var i = 0; i < count; i++) {
+  for (i = 0; i < count; i++) {
     randomIndex = generateRandomNumber(0, features.length - 1);
     result.push(features[randomIndex]);
     features.splice(randomIndex, 1);
@@ -112,45 +112,50 @@ var renderOrder = function (order, template) {
 };
 
 
-var orderForms = document.querySelector('.notice__form--disabled').querySelectorAll('fieldset');
+var i = 0;
 var orders = [];
-var templatePinElement = document.querySelector('template').content.querySelector('button.map__pin');
 var pinsFragment = document.createDocumentFragment();
-var mapElement = document.querySelector('.map');
-var templateOrderElement = document.querySelector('template').content.querySelector('article.map__card');
-var buttonPinMain = document.querySelector('button.map__pin--main');
 var ordersFragment = document.createDocumentFragment();
-var onePin = document.querySelector('.map__pin');
+var hiddenFormElement = document.querySelector('.notice__form--disabled');
+var orderFormElements = document.querySelector('.notice__form--disabled').querySelectorAll('fieldset');
+var templatePinElements = document.querySelector('template').content.querySelector('button.map__pin');
+var templateOrderElement = document.querySelector('template').content.querySelector('article.map__card');
+var mapElement = document.querySelector('.map');
+var userPinElement = document.querySelector('.map__pin');
+var allUserPinElements = document.querySelectorAll('.map__pin');
+var mapPinsElement = document.querySelector('.map__pins');
+var pinMainElement = document.querySelector('button.map__pin--main');
+var filterContainerElement = document.querySelector('.map__filters-container');
 
 
-for (i = 0; i < orderForms.length; i++) {
-  orderForms[i].setAttribute('disabled', 'disabled');
+for (i = 0; i < orderFormElements.length; i++) {
+  orderFormElements[i].setAttribute('disabled', 'disabled');
 }
-for (var i = 0; i < ORDER_LIMIT; i++) {
+for (i = 0; i < ORDER_LIMIT; i++) {
   orders.push(generateOrder(i));
 }
 for (i = 0; i < orders.length; i++) {
-  pinsFragment.appendChild(renderPin(orders[i], templatePinElement));
+  pinsFragment.appendChild(renderPin(orders[i], templatePinElements));
 }
 ordersFragment.appendChild(renderOrder(orders[0], templateOrderElement));
 
 
 var onButtonMouseup = function () {
   mapElement.classList.remove('map--faded');
-  document.querySelector('.map__pins').appendChild(pinsFragment);
-  for (i = 0; i < orderForms.length; i++) {
-    orderForms[i].removeAttribute('disabled', 'disabled');
+  mapPinsElement.appendChild(pinsFragment);
+  for (i = 0; i < orderFormElements.length; i++) {
+    orderFormElements[i].removeAttribute('disabled', 'disabled');
   }
-  document.querySelector('.notice__form--disabled').classList.remove('notice__form--disabled');
-  buttonPinMain.removeEventListener('mouseup', onButtonMouseup);
+  hiddenFormElement.classList.remove('notice__form--disabled');
+  pinMainElement.removeEventListener('mouseup', onButtonMouseup);
 };
-buttonPinMain.addEventListener('mouseup', onButtonMouseup);
+pinMainElement.addEventListener('mouseup', onButtonMouseup);
 
 var onButtonClick = function (event) {
-  for (i = 0; i < document.querySelectorAll('.map__pin'); i++) {
+  for (i = 0; i < allUserPinElements; i++) {
     if (event.className !== 'map__pin--main') {
-      mapElement.insertBefore(ordersFragment, document.querySelector('.map__filters-container'));
+      mapElement.insertBefore(ordersFragment, filterContainerElement);
     }
   }
 };
-onePin.addEventListener('click', onButtonClick);
+userPinElement.addEventListener('click', onButtonClick);
