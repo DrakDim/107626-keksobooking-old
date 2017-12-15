@@ -1,27 +1,18 @@
 'use strict';
 
-/**
- * Константы
- */
-
 var ORDER_LIMIT = 8;
-
 var PRICE_MIN = 1000;
 var PRICE_MAX = 1000000;
-
 var LOCATION_X_MIN = 300;
 var LOCATION_X_MAX = 900;
 var LOCATION_Y_MIN = 100;
 var LOCATION_Y_MAX = 500;
-
 var MIN_ROOMS = 1;
 var MAX_ROOMS = 5;
 var MIN_GUESTS = 1;
 var MAX_GUESTS = 100;
-
 var IMAGE_OFFSET_X = 20;
 var IMAGE_OFSSET_Y = 65;
-
 var HOME_TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец',
   'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик',
   'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
@@ -29,9 +20,6 @@ var HOME_TYPES = ['flat', 'house', 'bungalo'];
 var TIME_CHECKS = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
-/**
- * Промежуточные вычисления
- */
 
 var generateRandomNumber = function (min, max)	{
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -49,15 +37,6 @@ var convertOfferTypeToText = function (offertType) {
       return 'Нет такого значения';
   }
 };
-
-var orderForms = document.querySelector('.notice__form--disabled').querySelectorAll('fieldset');
-for (i = 0; i < orderForms.length; i++) {
-  orderForms[i].setAttribute('disabled', 'disabled');
-}
-
-/**
- * Cоздание исходных данных
- */
 
 var generateRandomFeatures = function () {
   var features = FEATURES.slice(0);
@@ -98,49 +77,16 @@ var generateOrder = function (index) {
   };
 };
 
-var orders = [];
-for (var i = 0; i < ORDER_LIMIT; i++) {
-  orders.push(generateOrder(i));
-}
-
-/**
- * Отрисовка пинов
- */
-
-var templatePinElement = document.querySelector('template').content.querySelector('button.map__pin');
-var renderPin = function (order) {
-  var pinElement = templatePinElement.cloneNode(true);
+var renderPin = function (order, template) {
+  var pinElement = template.cloneNode(true);
   pinElement.style.left = (order.location.x - IMAGE_OFFSET_X) + 'px';
   pinElement.style.top = (order.location.y - IMAGE_OFSSET_Y) + 'px';
   pinElement.querySelector('img').src = order.author.avatar;
   return pinElement;
 };
 
-var pinsFragment = document.createDocumentFragment();
-for (i = 0; i < orders.length; i++) {
-  pinsFragment.appendChild(renderPin(orders[i]));
-}
-
-var mapElement = document.querySelector('.map');
-var onButtonMouseup = function () {
-  mapElement.classList.remove('map--faded');
-  document.querySelector('.map__pins').appendChild(pinsFragment);
-  for (i = 0; i < orderForms.length; i++) {
-    orderForms[i].removeAttribute('disabled', 'disabled');
-  }
-  document.querySelector('.notice__form--disabled').classList.remove('notice__form--disabled');
-};
-
-var buttonPinMain = document.querySelector('button.map__pin--main');
-buttonPinMain.addEventListener('mouseup', onButtonMouseup);
-
-/**
- * Отрисовка объявления
- */
-
-var templateOrderElement = document.querySelector('template').content.querySelector('article.map__card');
-var renderOrder = function (order) {
-  var orderElement = templateOrderElement.cloneNode(true);
+var renderOrder = function (order, template) {
+  var orderElement = template.cloneNode(true);
   orderElement.querySelector('h3').textContent = order.offer.title;
   orderElement.querySelector('p small').textContent = order.offer.address;
   orderElement.querySelector('.popup__price').innerHTML = order.offer.price + ' &#x20bd;/ночь';
@@ -165,18 +111,46 @@ var renderOrder = function (order) {
   return orderElement;
 };
 
+
+var orderForms = document.querySelector('.notice__form--disabled').querySelectorAll('fieldset');
+var orders = [];
+var templatePinElement = document.querySelector('template').content.querySelector('button.map__pin');
+var pinsFragment = document.createDocumentFragment();
+var mapElement = document.querySelector('.map');
+var templateOrderElement = document.querySelector('template').content.querySelector('article.map__card');
+var buttonPinMain = document.querySelector('button.map__pin--main');
 var ordersFragment = document.createDocumentFragment();
-ordersFragment.appendChild(renderOrder(orders[0]));
-var onButtonClick = function () {
-  mapElement.insertBefore(ordersFragment, document.querySelector('.map__filters-container'));
-};
-
 var onePin = document.querySelector('.map__pin');
+
+
+for (i = 0; i < orderForms.length; i++) {
+  orderForms[i].setAttribute('disabled', 'disabled');
+}
+for (var i = 0; i < ORDER_LIMIT; i++) {
+  orders.push(generateOrder(i));
+}
+for (i = 0; i < orders.length; i++) {
+  pinsFragment.appendChild(renderPin(orders[i], templatePinElement));
+}
+ordersFragment.appendChild(renderOrder(orders[0], templateOrderElement));
+
+
+var onButtonMouseup = function () {
+  mapElement.classList.remove('map--faded');
+  document.querySelector('.map__pins').appendChild(pinsFragment);
+  for (i = 0; i < orderForms.length; i++) {
+    orderForms[i].removeAttribute('disabled', 'disabled');
+  }
+  document.querySelector('.notice__form--disabled').classList.remove('notice__form--disabled');
+  buttonPinMain.removeEventListener('mouseup', onButtonMouseup);
+};
+buttonPinMain.addEventListener('mouseup', onButtonMouseup);
+
+var onButtonClick = function (event) {
+  for (i = 0; i < document.querySelectorAll('.map__pin'); i++) {
+    if (event.className !== 'map__pin--main') {
+      mapElement.insertBefore(ordersFragment, document.querySelector('.map__filters-container'));
+    }
+  }
+};
 onePin.addEventListener('click', onButtonClick);
-
-var closePopup = document.querySelector('.popup__close');
-var popupOrder = document.querySelector('.popup');
-closePopup.addEventListener('click', function () {
-  popupOrder.classList.add('hidden');
-});
-
