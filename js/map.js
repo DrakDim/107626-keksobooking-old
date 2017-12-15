@@ -43,7 +43,7 @@ var generateRandomFeatures = function () {
   var result = [];
   var count = generateRandomNumber(1, FEATURES.length);
   var randomIndex;
-  for (i = 0; i < count; i++) {
+  for (var i = 0; i < count; i++) {
     randomIndex = generateRandomNumber(0, features.length - 1);
     result.push(features[randomIndex]);
     features.splice(randomIndex, 1);
@@ -122,7 +122,6 @@ var templatePinElements = document.querySelector('template').content.querySelect
 var templateOrderElement = document.querySelector('template').content.querySelector('article.map__card');
 var mapElement = document.querySelector('.map');
 var userPinElement = document.querySelector('.map__pin');
-var allUserPinElements = document.querySelectorAll('.map__pin');
 var mapPinsElement = document.querySelector('.map__pins');
 var pinMainElement = document.querySelector('button.map__pin--main');
 var filterContainerElement = document.querySelector('.map__filters-container');
@@ -152,10 +151,8 @@ var onButtonMouseup = function () {
 pinMainElement.addEventListener('mouseup', onButtonMouseup);
 
 var onButtonClick = function (event) {
-  for (i = 0; i < allUserPinElements; i++) {
-    if (event.className !== 'map__pin--main') {
-      mapElement.insertBefore(ordersFragment, filterContainerElement);
-    }
+  if (event.className !== 'map__pin--main') {
+    mapElement.insertBefore(ordersFragment, filterContainerElement);
   }
 };
 userPinElement.addEventListener('click', onButtonClick);
