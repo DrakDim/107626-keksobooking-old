@@ -151,8 +151,11 @@ var onButtonMouseup = function () {
 pinMainElement.addEventListener('mouseup', onButtonMouseup);
 
 var onButtonClick = function (event) {
-  if (event.className !== 'map__pin--main') {
-    mapElement.insertBefore(ordersFragment, filterContainerElement);
+  if (event.target.className !== 'map__pin--main') {
+    if (event.target.className === 'map__pin') {
+      event.target.classList.add('map__pin--active');
+      mapElement.insertBefore(ordersFragment, filterContainerElement);
+    }
   }
 };
 userPinElement.addEventListener('click', onButtonClick);
