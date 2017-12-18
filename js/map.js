@@ -111,6 +111,10 @@ var renderOrder = function (order, template) {
   return orderElement;
 };
 
+var removeOrder = function () {
+  mapElement.removeChild(document.querySelector('.popup'));
+};
+
 var resetPin = function (element) {
   element.classList.remove('map__pin--active');
 };
@@ -120,7 +124,6 @@ var resetPins = function () {
 };
 
 var activatePin = function (element) {
-  resetPins();
   element.classList.add('map__pin--active');
 };
 
@@ -132,9 +135,9 @@ var deactivePins = function (event) {
 var onPinElementClick = function (order) {
   return function (event) {
     deactivePins(event);
+    removeOrder();
     orderElement = renderOrder(order, templateOrderElement);
-    ordersFragment.appendChild(orderElement);
-    mapElement.insertBefore(ordersFragment, filterContainerElement);
+    mapElement.insertBefore(orderElement, filterContainerElement);
   };
 };
 
@@ -143,7 +146,6 @@ var pinElement;
 var i = 0;
 var orders = [];
 var pinsFragment = document.createDocumentFragment();
-var ordersFragment = document.createDocumentFragment();
 var hiddenFormElement = document.querySelector('.notice__form--disabled');
 var orderFormElements = document.querySelector('.notice__form--disabled').querySelectorAll('fieldset');
 var orderElement;
@@ -171,12 +173,12 @@ for (i = 0; i < orders.length; i++) {
 var onMainPinMouseup = function () {
   mapElement.classList.remove('map--faded');
   mapPinsElement.appendChild(pinsFragment);
+  usersPinElement = document.querySelectorAll('.map__pin');
   for (i = 0; i < orderFormElements.length; i++) {
     orderFormElements[i].removeAttribute('disabled', 'disabled');
   }
   hiddenFormElement.classList.remove('notice__form--disabled');
   pinMainElement.removeEventListener('mouseup', onMainPinMouseup);
 };
-pinMainElement.addEventListener('mouseup', onMainPinMouseup);
 
-usersPinElement = document.querySelectorAll('.map__pin');
+pinMainElement.addEventListener('mouseup', onMainPinMouseup);
