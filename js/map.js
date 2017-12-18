@@ -112,18 +112,18 @@ var renderOrder = function (order, template) {
 };
 
 
+var pinElement;
 var i = 0;
 var orders = [];
 var pinsFragment = document.createDocumentFragment();
 var ordersFragment = document.createDocumentFragment();
 var hiddenFormElement = document.querySelector('.notice__form--disabled');
 var orderFormElements = document.querySelector('.notice__form--disabled').querySelectorAll('fieldset');
+var orderElement;
 var templatePinElements = document.querySelector('template').content.querySelector('button.map__pin');
 var templateOrderElement = document.querySelector('template').content.querySelector('article.map__card');
 var mapElement = document.querySelector('.map');
-var userPinElement = document.querySelector('.map__pin');
 var mapPinsElement = document.querySelector('.map__pins');
-var allPinsElement = document.querySelectorAll('.map__pin');
 var pinMainElement = document.querySelector('button.map__pin--main');
 var filterContainerElement = document.querySelector('.map__filters-container');
 
@@ -135,10 +135,10 @@ for (i = 0; i < ORDER_LIMIT; i++) {
   orders.push(generateOrder(i));
 }
 for (i = 0; i < orders.length; i++) {
-  pinsFragment.appendChild(renderPin(orders[i], templatePinElements));
+  pinElement = renderPin(orders[i], templatePinElements);
+  pinElement.addEventListener('click', onPinElementClick(orders[i])); // вариант с onPinElementClick(orders[i]) не работает, потому что функция пытается выполнится сразу, помнишь? круглые скобки, ошибка новчика
+  pinsFragment.appendChild(pinElement);
 }
-ordersFragment.appendChild(renderOrder(orders[0], templateOrderElement));
-
 
 var onMainPinMouseup = function () {
   mapElement.classList.remove('map--faded');
@@ -147,16 +147,15 @@ var onMainPinMouseup = function () {
     orderFormElements[i].removeAttribute('disabled', 'disabled');
   }
   hiddenFormElement.classList.remove('notice__form--disabled');
-  for (i = 0; i < allPinsElement.length; i++) {
-    if (userPinElement.classList !== '.map__pin--main') {
-      userPinElement.addEventListener('click', onUserPinClick);
-    }
-  }
   pinMainElement.removeEventListener('mouseup', onMainPinMouseup);
 };
 pinMainElement.addEventListener('mouseup', onMainPinMouseup);
 
-var onUserPinClick = function (event) {
-  event.target.classList.add('map__pin--active');
-  mapElement.insertBefore(ordersFragment, filterContainerElement);
+var onPinElementClick = function (order) {
+  return function (event) {
+    event.target.classList.add('map__pin--active');
+    orderElement = renderOrder(order, templateOrderElement);
+    ordersFragment.appendChild(orderElement);
+    mapElement.insertBefore(ordersFragment, filterContainerElement);
+  };
 };
