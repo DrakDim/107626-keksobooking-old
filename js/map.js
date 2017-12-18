@@ -111,6 +111,33 @@ var renderOrder = function (order, template) {
   return orderElement;
 };
 
+var resetPin = function (element) {
+  element.classList.remove('map__pin--active');
+};
+
+var resetPins = function () {
+  usersPinElement.forEach(resetPin);
+};
+
+var activatePin = function (element) {
+  resetPins();
+  element.classList.add('map__pin--active');
+};
+
+var deactivePins = function (event) {
+  resetPins();
+  activatePin(event.target);
+};
+
+var onPinElementClick = function (order) {
+  return function (event) {
+    deactivePins(event);
+    orderElement = renderOrder(order, templateOrderElement);
+    ordersFragment.appendChild(orderElement);
+    mapElement.insertBefore(ordersFragment, filterContainerElement);
+  };
+};
+
 
 var pinElement;
 var i = 0;
@@ -123,6 +150,7 @@ var orderElement;
 var templatePinElements = document.querySelector('template').content.querySelector('button.map__pin');
 var templateOrderElement = document.querySelector('template').content.querySelector('article.map__card');
 var mapElement = document.querySelector('.map');
+var usersPinElement;
 var mapPinsElement = document.querySelector('.map__pins');
 var pinMainElement = document.querySelector('button.map__pin--main');
 var filterContainerElement = document.querySelector('.map__filters-container');
@@ -136,7 +164,7 @@ for (i = 0; i < ORDER_LIMIT; i++) {
 }
 for (i = 0; i < orders.length; i++) {
   pinElement = renderPin(orders[i], templatePinElements);
-  pinElement.addEventListener('click', onPinElementClick(orders[i])); // вариант с onPinElementClick(orders[i]) не работает, потому что функция пытается выполнится сразу, помнишь? круглые скобки, ошибка новчика
+  pinElement.addEventListener('click', onPinElementClick(orders[i]));
   pinsFragment.appendChild(pinElement);
 }
 
@@ -151,11 +179,4 @@ var onMainPinMouseup = function () {
 };
 pinMainElement.addEventListener('mouseup', onMainPinMouseup);
 
-var onPinElementClick = function (order) {
-  return function (event) {
-    event.target.classList.add('map__pin--active');
-    orderElement = renderOrder(order, templateOrderElement);
-    ordersFragment.appendChild(orderElement);
-    mapElement.insertBefore(ordersFragment, filterContainerElement);
-  };
-};
+usersPinElement = document.querySelectorAll('.map__pin');
