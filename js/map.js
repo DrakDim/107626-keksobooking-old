@@ -134,29 +134,32 @@ var removePopup = function () {
 
 var onPinElementClick = function (order) {
   return function (event) {
+    var tagName = event.target.tagName.toLowerCase();
     event.preventDefault();
+
     resetPins();
-    if (event.target.tagName === 'button') {
+    removePopup();
+
+    if (tagName === 'button') {
       activatePin(event.target);
-    } if (event.target.tagName === 'img') {
+    } if (tagName === 'img') {
       activatePin(event.target.parentNode);
     }
-    removePopup();
 
     orderElement = renderOrder(order, templateOrderElement);
     mapElement.insertBefore(orderElement, filterContainerElement);
+  };
+};
 
-    var popupClose = document.querySelector('.popup__close');
-    popupClose.addEventListener('click', onPopupCloseClick);
-
-    document.addEventListener('keydown', function (evt) {
+/* document.addEventListener('keydown', function (evt) {
       if (evt.keyCode === ESC_CODE) {
         removePopup();
         resetPins();
       }
     });
-  };
-};
+
+var popupClose = document.querySelector('.popup__close');
+    popupClose.addEventListener('click', onPopupCloseClick); */
 
 
 var pinElement;
@@ -183,7 +186,7 @@ for (i = 0; i < ORDER_LIMIT; i++) {
 }
 for (i = 0; i < orders.length; i++) {
   pinElement = renderPin(orders[i], templatePinElements);
-  pinElement.addEventListener('click', onPinElementClick(orders[i]));
+  pinElement.addEventListener('click', onPinElementClick(orders[i]), false);
   pinsFragment.appendChild(pinElement);
 }
 
