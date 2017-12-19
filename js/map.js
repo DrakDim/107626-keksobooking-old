@@ -19,6 +19,8 @@ var HOME_TITLES = ['Большая уютная квартира', 'Малень
 var HOME_TYPES = ['flat', 'house', 'bungalo'];
 var TIME_CHECKS = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+// var ENTER_CODE = 13;
+var ESC_CODE = 27;
 
 
 var generateRandomNumber = function (min, max)	{
@@ -132,8 +134,13 @@ var removePopup = function () {
 
 var onPinElementClick = function (order) {
   return function (event) {
+    event.preventDefault();
     resetPins();
-    activatePin(event.target);
+    if (event.target.tagName === 'button') {
+      activatePin(event.target);
+    } if (event.target.tagName === 'img') {
+      activatePin(event.target.parentNode);
+    }
     removePopup();
 
     orderElement = renderOrder(order, templateOrderElement);
@@ -143,7 +150,7 @@ var onPinElementClick = function (order) {
     popupClose.addEventListener('click', onPopupCloseClick);
 
     document.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === 27) {
+      if (evt.keyCode === ESC_CODE) {
         removePopup();
         resetPins();
       }
