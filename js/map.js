@@ -111,10 +111,6 @@ var renderOrder = function (order, template) {
   return orderElement;
 };
 
-var removeOrder = function () {
-  mapElement.removeChild(document.querySelector('.popup'));
-};
-
 var resetPin = function (element) {
   element.classList.remove('map__pin--active');
 };
@@ -127,17 +123,31 @@ var activatePin = function (element) {
   element.classList.add('map__pin--active');
 };
 
-var deactivePins = function (event) {
-  resetPins();
-  activatePin(event.target);
+var removePopup = function () {
+  var popup = document.querySelector('.popup');
+  if (popup) {
+    mapElement.removeChild(popup);
+  }
 };
 
 var onPinElementClick = function (order) {
   return function (event) {
-    deactivePins(event);
-    removeOrder();
+    resetPins();
+    activatePin(event.target);
+    removePopup();
+
     orderElement = renderOrder(order, templateOrderElement);
     mapElement.insertBefore(orderElement, filterContainerElement);
+
+    var popupClose = document.querySelector('.popup__close');
+    popupClose.addEventListener('click', onPopupCloseClick);
+
+    document.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === 27) {
+        removePopup();
+        resetPins();
+      }
+    });
   };
 };
 
@@ -180,5 +190,9 @@ var onMainPinMouseup = function () {
   hiddenFormElement.classList.remove('notice__form--disabled');
   pinMainElement.removeEventListener('mouseup', onMainPinMouseup);
 };
-
 pinMainElement.addEventListener('mouseup', onMainPinMouseup);
+
+var onPopupCloseClick = function () {
+  removePopup();
+  resetPins();
+};
