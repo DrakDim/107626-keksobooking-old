@@ -132,6 +132,13 @@ var removePopup = function () {
   }
 };
 
+var createPopup = function (order) {
+  orderElement = renderOrder(order, templateOrderElement);
+  mapElement.insertBefore(orderElement, filterContainerElement);
+  var popupClose = document.querySelector('.popup__close');
+  popupClose.addEventListener('click', onPopupCloseClick);
+};
+
 var onPinElementClick = function (order) {
   return function (event) {
     var tagName = event.target.tagName.toLowerCase();
@@ -146,8 +153,7 @@ var onPinElementClick = function (order) {
       activatePin(event.target.parentNode);
     }
 
-    orderElement = renderOrder(order, templateOrderElement);
-    mapElement.insertBefore(orderElement, filterContainerElement);
+    createPopup(order);
   };
 };
 
@@ -158,8 +164,7 @@ var onPinElementClick = function (order) {
       }
     });
 
-var popupClose = document.querySelector('.popup__close');
-    popupClose.addEventListener('click', onPopupCloseClick); */
+ */
 
 
 var pinElement;
