@@ -142,7 +142,6 @@ var onEscapePress = function (el) {
     if (evt.keyCode === ESC_CODE) {
       resetPins();
       mapElement.removeChild(el);
-      document.removeEventListener('keydown', onEscapePress(el));
     }
   };
 };
@@ -154,6 +153,7 @@ var createPopup = function (order) {
     resetPins();
     mapElement.removeChild(orderElement);
     popupClose.removeEventListener('click', onClick);
+    document.removeEventListener('keydown', onEscapePress(orderElement));
   };
 
   mapElement.insertBefore(orderElement, filterContainerElement);
