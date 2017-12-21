@@ -119,7 +119,7 @@ var disableFormElements = function () {
 };
 
 var enableFormElements = function () {
-  for (i = 0; i < orderFormElements.length; i++) {
+  for (var i = 0; i < orderFormElements.length; i++) {
     orderFormElements[i].removeAttribute('disabled', 'disabled');
   }
   hiddenFormElement.classList.remove('notice__form--disabled');
@@ -184,6 +184,14 @@ var onPinElementClick = function (order) {
   };
 };
 
+var onMainPinMouseup = function () {
+  mapElement.classList.remove('map--faded');
+  mapPinsElement.appendChild(pinsFragment);
+  usersPinElement = document.querySelectorAll('.map__pin');
+  enableFormElements();
+  pinMainElement.removeEventListener('mouseup', onMainPinMouseup);
+};
+
 
 var pinElement;
 var usersPinElement;
@@ -212,11 +220,4 @@ for (i = 0; i < orders.length; i++) {
   pinsFragment.appendChild(pinElement);
 }
 
-var onMainPinMouseup = function () {
-  mapElement.classList.remove('map--faded');
-  mapPinsElement.appendChild(pinsFragment);
-  usersPinElement = document.querySelectorAll('.map__pin');
-  enableFormElements();
-  pinMainElement.removeEventListener('mouseup', onMainPinMouseup);
-};
 pinMainElement.addEventListener('mouseup', onMainPinMouseup);
