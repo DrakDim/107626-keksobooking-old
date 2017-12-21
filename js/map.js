@@ -125,46 +125,45 @@ var activatePin = function (element) {
   element.classList.add('map__pin--active');
 };
 
-var removePopup = function () {
-  var popup = document.querySelector('.popup');
-  if (popup) {
-    mapElement.removeChild(popup);
-  }
-};
-
 var createPopup = function (order) {
-  orderElement = renderOrder(order, templateOrderElement);
+  var orderElement = renderOrder(order, templateOrderElement);
+  var popupClose = orderElement.querySelector('.popup__close');
+  var onClick = function () {
+    resetPins();
+    mapElement.removeChild(orderElement);
+    popupClose.removeEventListener('click', onClick);
+  };
+
   mapElement.insertBefore(orderElement, filterContainerElement);
-  var popupClose = document.querySelector('.popup__close');
-  popupClose.addEventListener('click', onPopupCloseClick);
+  popupClose.addEventListener('click', onClick);
+
+  document.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ESC_CODE) {
+      resetPins();
+      mapElement.removeChild(orderElement);
+    }
+  });
 };
 
 var onPinElementClick = function (order) {
   return function (event) {
     var tagName = event.target.tagName.toLowerCase();
-    event.preventDefault();
+    var popup = mapElement.querySelector('.popup');
 
+    event.preventDefault();
     resetPins();
-    removePopup();
 
     if (tagName === 'button') {
       activatePin(event.target);
     } if (tagName === 'img') {
       activatePin(event.target.parentNode);
+    } if (popup) {
+      mapElement.removeChild(popup);
     }
 
     createPopup(order);
   };
 };
-
-/* document.addEventListener('keydown', function (evt) {
-      if (evt.keyCode === ESC_CODE) {
-        removePopup();
-        resetPins();
-      }
-    });
-
- */
 
 
 var pinElement;
@@ -173,7 +172,6 @@ var orders = [];
 var pinsFragment = document.createDocumentFragment();
 var hiddenFormElement = document.querySelector('.notice__form--disabled');
 var orderFormElements = document.querySelector('.notice__form--disabled').querySelectorAll('fieldset');
-var orderElement;
 var templatePinElements = document.querySelector('template').content.querySelector('button.map__pin');
 var templateOrderElement = document.querySelector('template').content.querySelector('article.map__card');
 var mapElement = document.querySelector('.map');
@@ -206,8 +204,3 @@ var onMainPinMouseup = function () {
   pinMainElement.removeEventListener('mouseup', onMainPinMouseup);
 };
 pinMainElement.addEventListener('mouseup', onMainPinMouseup);
-
-var onPopupCloseClick = function () {
-  removePopup();
-  resetPins();
-};
