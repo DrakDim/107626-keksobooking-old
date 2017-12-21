@@ -152,14 +152,14 @@ var createPopup = function (order) {
   var callback = onEscapePress(orderElement);
   var onClick = function () {
     resetPins();
-    mapElement.removeChild(orderElement);
     popupClose.removeEventListener('click', onClick);
     document.removeEventListener('keydown', callback);
+    mapElement.removeChild(orderElement);
   };
 
   mapElement.insertBefore(orderElement, filterContainerElement);
-  popupClose.addEventListener('click', onClick);
 
+  popupClose.addEventListener('click', onClick);
   document.addEventListener('keydown', callback);
 };
 
