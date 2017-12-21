@@ -19,7 +19,6 @@ var HOME_TITLES = ['Большая уютная квартира', 'Малень
 var HOME_TYPES = ['flat', 'house', 'bungalo'];
 var TIME_CHECKS = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-// var ENTER_CODE = 13;
 var ESC_CODE = 27;
 
 
@@ -113,6 +112,19 @@ var renderOrder = function (order, template) {
   return orderElement;
 };
 
+var disableFormElements = function () {
+  for (var i = 0; i < orderFormElements.length; i++) {
+    orderFormElements[i].setAttribute('disabled', 'disabled');
+  }
+};
+
+var enableFormElements = function () {
+  for (i = 0; i < orderFormElements.length; i++) {
+    orderFormElements[i].removeAttribute('disabled', 'disabled');
+  }
+  hiddenFormElement.classList.remove('notice__form--disabled');
+};
+
 var resetPin = function (element) {
   element.classList.remove('map__pin--active');
 };
@@ -157,7 +169,9 @@ var onPinElementClick = function (order) {
       activatePin(event.target);
     } if (tagName === 'img') {
       activatePin(event.target.parentNode);
-    } if (popup) {
+    }
+
+    if (popup) {
       mapElement.removeChild(popup);
     }
 
@@ -167,23 +181,22 @@ var onPinElementClick = function (order) {
 
 
 var pinElement;
+var usersPinElement;
 var i = 0;
 var orders = [];
 var pinsFragment = document.createDocumentFragment();
 var hiddenFormElement = document.querySelector('.notice__form--disabled');
-var orderFormElements = document.querySelector('.notice__form--disabled').querySelectorAll('fieldset');
+var orderFormElements = document.querySelector('.notice__form').querySelectorAll('fieldset');
 var templatePinElements = document.querySelector('template').content.querySelector('button.map__pin');
 var templateOrderElement = document.querySelector('template').content.querySelector('article.map__card');
 var mapElement = document.querySelector('.map');
-var usersPinElement;
 var mapPinsElement = document.querySelector('.map__pins');
 var pinMainElement = document.querySelector('button.map__pin--main');
 var filterContainerElement = document.querySelector('.map__filters-container');
 
 
-for (i = 0; i < orderFormElements.length; i++) {
-  orderFormElements[i].setAttribute('disabled', 'disabled');
-}
+disableFormElements();
+
 for (i = 0; i < ORDER_LIMIT; i++) {
   orders.push(generateOrder(i));
 }
@@ -197,10 +210,7 @@ var onMainPinMouseup = function () {
   mapElement.classList.remove('map--faded');
   mapPinsElement.appendChild(pinsFragment);
   usersPinElement = document.querySelectorAll('.map__pin');
-  for (i = 0; i < orderFormElements.length; i++) {
-    orderFormElements[i].removeAttribute('disabled', 'disabled');
-  }
-  hiddenFormElement.classList.remove('notice__form--disabled');
+  enableFormElements();
   pinMainElement.removeEventListener('mouseup', onMainPinMouseup);
 };
 pinMainElement.addEventListener('mouseup', onMainPinMouseup);
