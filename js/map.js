@@ -149,17 +149,18 @@ var onEscapePress = function (el) {
 var createPopup = function (order) {
   var orderElement = renderOrder(order, templateOrderElement);
   var popupClose = orderElement.querySelector('.popup__close');
+  var callback = onEscapePress(orderElement);
   var onClick = function () {
     resetPins();
     mapElement.removeChild(orderElement);
     popupClose.removeEventListener('click', onClick);
-    document.removeEventListener('keydown', onEscapePress(orderElement));
+    document.removeEventListener('keydown', callback);
   };
 
   mapElement.insertBefore(orderElement, filterContainerElement);
   popupClose.addEventListener('click', onClick);
 
-  document.addEventListener('keydown', onEscapePress(orderElement));
+  document.addEventListener('keydown', callback);
 };
 
 var onPinElementClick = function (order) {
