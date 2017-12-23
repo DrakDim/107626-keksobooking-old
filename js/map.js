@@ -137,30 +137,28 @@ var activatePin = function (element) {
   element.classList.add('map__pin--active');
 };
 
-var onEscapePress = function (el) {
-  return function (evt) {
-    if (evt.keyCode === ESC_CODE) {
-      resetPins();
-      mapElement.removeChild(el);
-    }
-  };
-};
-
 var createPopup = function (order) {
   var orderElement = renderOrder(order, templateOrderElement);
   var popupClose = orderElement.querySelector('.popup__close');
-  var callback = onEscapePress(orderElement);
+
   var onClick = function () {
     resetPins();
     popupClose.removeEventListener('click', onClick);
-    document.removeEventListener('keydown', callback);
+    document.removeEventListener('keydown', onPressEscape);
     mapElement.removeChild(orderElement);
+  };
+
+  var onPressEscape = function (evt) {
+    if (evt.keyCode === ESC_CODE) {
+      resetPins();
+      mapElement.removeChild(orderElement);
+    }
   };
 
   mapElement.insertBefore(orderElement, filterContainerElement);
 
   popupClose.addEventListener('click', onClick);
-  document.addEventListener('keydown', callback);
+  document.addEventListener('keydown', onPressEscape);
 };
 
 var onPinElementClick = function (order) {
