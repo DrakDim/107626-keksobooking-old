@@ -220,3 +220,84 @@ for (i = 0; i < orders.length; i++) {
 }
 
 pinMainElement.addEventListener('mouseup', onMainPinMouseup);
+
+/**
+ * Задание 14 - Синхронизация форм
+ */
+
+// При клике на option в первой форме должна запускаться функция
+// Которая в зависимости от value выбранного option должна установить selected для option с таким же values
+
+var timeIn = document.querySelector('select[name="timein"]');
+var timeOut = document.querySelector('select[name="timeout"]');
+
+var onClickTimeForm = function (event) {
+  for (i = 0; i < timeIn.length; i++) {
+    if (timeIn[i] === event.target) {
+      timeOut[i].selected = true;
+    }
+    if (timeOut[i] === event.target) {
+      timeIn[i].selected = true;
+    }
+  }
+};
+timeIn.addEventListener('click', onClickTimeForm);
+timeOut.addEventListener('click', onClickTimeForm);
+
+// При выборе того или иного типа жилья, выставлять разный минимальный порог цены
+
+var typeRoom = document.querySelector('select[name="type"]');
+var price = document.querySelector('input[name="price"]');
+
+var onClickTypeRoomForm = function (event) {
+  for (i = 0; i < typeRoom.length; i++) {
+    if (typeRoom[i] === event.target) {
+      switch (typeRoom[i].value) {
+        case 'bungalo':
+          price.setAttribute('min', 0);
+          break;
+        case 'flat':
+          price.setAttribute('min', 1000);
+          break;
+        case 'house':
+          price.setAttribute('min', 5000);
+          break;
+        case 'palace':
+          price.setAttribute('min', 10000);
+          break;
+      }
+    }
+  }
+};
+typeRoom.addEventListener('click', onClickTypeRoomForm);
+
+// Количество комнат связано с количеством гостей
+// 1 комната — «для одного гостя»
+// 2 комнаты — «для 2-х или 1-го гостя»
+// 3 комнаты — «для 2-х, 1-го или 3-х гостей»
+// 100 комнат — «не для гостей»
+
+var amountRooms = document.querySelector('select[name="rooms"]');
+var capacityGuests = document.querySelector('select[name="capacity"]');
+
+var onClickAmountRoomForm = function (event) {
+  for (i = 0; i < amountRooms.length; i++) {
+    if (amountRooms[i] === event.target) {
+      switch (amountRooms[i].value) {
+        case 1:
+          capacityGuests.querySelector('option[value="1"]').selected = true;
+          break;
+        case 2:
+          capacityGuests.querySelector('option[value="2"]').selected = true;
+          break;
+        case 3:
+          capacityGuests.querySelector('option[value="3"]').selected = true;
+          break;
+        case 100:
+          capacityGuests.querySelector('option[value="0"]').selected = true;
+          break;
+      }
+    }
+  }
+};
+amountRooms.addEventListener('click', onClickAmountRoomForm);
