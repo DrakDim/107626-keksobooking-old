@@ -231,18 +231,24 @@ pinMainElement.addEventListener('mouseup', onMainPinMouseup);
 var timeIn = document.querySelector('select[name="timein"]');
 var timeOut = document.querySelector('select[name="timeout"]');
 
-var onClickTimeForm = function (event) {
+var onClickTimeInForm = function (event) {
   for (i = 0; i < timeIn.length; i++) {
     if (timeIn[i] === event.target) {
       timeOut[i].selected = true;
     }
+  }
+};
+
+var onClickTimeOutForm = function (event) {
+  for (i = 0; i < timeOut.length; i++) {
     if (timeOut[i] === event.target) {
       timeIn[i].selected = true;
     }
   }
 };
-timeIn.addEventListener('click', onClickTimeForm);
-timeOut.addEventListener('click', onClickTimeForm);
+
+timeIn.addEventListener('click', onClickTimeInForm);
+timeOut.addEventListener('click', onClickTimeOutForm);
 
 // При выборе того или иного типа жилья, выставлять разный минимальный порог цены
 
