@@ -10,9 +10,10 @@ _`.editorconfig`, `.eslintrc`, `.gitattributes`, `.gitignore`, `.travis.yml`, `p
 
 ---
 
-Ссылки для примера решения проблемы переключения флагов с одновременным переключением картинок (мой мозг поймет что я щас написал):
-http://jsfiddle.net/6xd5v24x/2/
-http://jsfiddle.net/6xd5v24x/1/
+Ссылки для примера решения проблемы переключения флагов с одновременным переключением картинок (мой мозг поймет что я щас написал):_<br>
+http://jsfiddle.net/6xd5v24x/2/ <br>
+http://jsfiddle.net/6xd5v24x/1/ <br>
+https://developer.mozilla.org/ru/docs/Web/Events/change#Examples
 
 ---
 
